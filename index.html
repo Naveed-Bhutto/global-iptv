@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
+    <meta name="description" content="Free Global IPTV - Watch Pakistani, Indian and international live TV channels with low bandwidth optimization">
+    <title>Global IPTV Lite | Free TV Streams</title>
+    <!-- Plyr CSS + Font Awesome -->
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #0a0f1e 0%, #0c1222 100%);
+            color: #eef2ff;
+            overflow-x: hidden;
+        }
+
+        /* Mobile-first layout */
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header with glassmorphism */
+        .header {
+            background: rgba(17, 24, 39, 0.95);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 0.8rem 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(59, 130, 246, 0.3);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo h1 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #c084fc, #60a5fa, #3b82f6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .logo p {
+            font-size: 0.65rem;
+            color: #9ca3af;
+            letter-spacing: 0.5px;
+        }
+
+        .bandwidth-toggle {
+            background: #1e293b;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid #334155;
+            font-weight: 500;
+        }
+        
+        .bandwidth-toggle i {
+            font-size: 1rem;
+        }
+        
+        .bandwidth-toggle.active {
+            background: linear-gradient(135deg, #4c1d95, #5b21b6);
+            border-color: #a855f7;
+            color: white;
+            box-shadow: 0 0 10px rgba(168, 85, 247, 0.3);
+        }
+
+        /* Main layout */
+        .main-layout {
+            display: flex;
+            flex: 1;
+            flex-direction: row;
+            position: relative;
+        }
+
+        /* Sidebar categories */
+        .sidebar {
+            width: 280px;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(8px);
+            border-right: 1px solid #1e293b;
+            overflow-y: auto;
+            max-height: calc(100vh - 70px);
+            position: sticky;
+            top: 70px;
+            z-index: 90;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .category-list {
+            padding: 1rem 0.5rem;
+        }
+        
+        .category-item {
+            padding: 0.8rem 1.2rem;
+            margin: 0.3rem 0.5rem;
+            border-radius: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            color: #cbd5e6;
+        }
+        
+        .category-item i {
+            width: 28px;
+            font-size: 1.2rem;
+        }
+        
+        .category-item.active {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+        
+        .category-item:hover:not(.active) {
+            background: rgba(59, 130, 246, 0.2);
+            transform: translateX(4px);
+        }
+
+        /* Content area */
+        .content-area {
+            flex: 1;
+            padding: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .video-wrapper {
+            background: #000000;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.5);
+            aspect-ratio: 16 / 9;
+            width: 100%;
+            position: relative;
+        }
+        
+        #player {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .plyr {
+            border-radius: 20px;
+        }
+
+        .status-badge {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 0.5rem 1rem;
+            border-radius: 12px;
+            backdrop-filter: blur(4px);
+        }
+        
+        .status-online {
+            color: #4ade80;
+        }
+        
+        .status-offline {
+            color: #f87171;
+        }
+        
+        .reconnect-info {
+            color: #94a3b8;
+            font-size: 0.7rem;
+        }
+
+        /* Channels grid */
+        .channels-section h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            padding-left: 0.3rem;
+            border-left: 4px solid #3b82f6;
+        }
+        
+        .channels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+            gap: 1rem;
+        }
+        
+        .channel-card {
+            background: rgba(17, 24, 39, 0.8);
+            backdrop-filter: blur(4px);
+            border-radius: 18px;
+            padding: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            cursor: pointer;
+            transition: all 0.25s;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+        
+        .channel-card:hover {
+            background: linear-gradient(135deg, #1e293b, #1e1b4b);
+            transform: translateY(-3px);
+            border-color: #3b82f6;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .channel-logo {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        
+        .channel-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .channel-info {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .channel-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 0.2rem;
+        }
+        
+        .channel-category {
+            font-size: 0.65rem;
+            color: #9ca3af;
+        }
+
+        /* Mobile sidebar handling */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            margin-right: 0.8rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            transition: background 0.2s;
+        }
+        
+        .menu-toggle:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .sidebar {
+                position: fixed;
+                left: 0;
+                top: 0;
+                height: 100%;
+                transform: translateX(-100%);
+                z-index: 200;
+                width: 280px;
+                background: rgba(15, 23, 42, 0.98);
+                backdrop-filter: blur(16px);
+                transition: transform 0.3s;
+                top: 0;
+                max-height: 100vh;
+            }
+            
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            
+            .overlay {
+                position: fixed;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.7);
+                z-index: 150;
+                display: none;
+                backdrop-filter: blur(3px);
+            }
+            
+            .overlay.active {
+                display: block;
+            }
+            
+            .channels-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: 0.8rem;
+            }
+            
+            .content-area {
+                padding: 1rem;
+            }
+        }
+        
+        .footer-note {
+            text-align: center;
+            font-size: 0.7rem;
+            padding: 1.2rem;
+            color: #5b6e8c;
+            border-top: 1px solid #1e2a3a;
+            background: rgba(0, 0, 0, 0.3);
+        }
+        
+        .low-bw-indicator {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 600;
+            backdrop-filter: blur(8px);
+            z-index: 99;
+            color: #fbbf24;
+            border: 1px solid #fbbf24;
+            pointer-events: none;
+        }
+        
+        /* Loading animation */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .loading {
+            animation: pulse 1s ease-in-out infinite;
+        }
+        
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #3b82f6;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <div class="header">
+        <div style="display: flex; align-items: center;">
+            <button class="menu-toggle" id="menuToggleBtn" aria-label="Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="logo">
+                <h1>🌍 Global IPTV Lite</h1>
+                <p>Pakistani · Indian · Global FTA</p>
+            </div>
+        </div>
+        <div class="bandwidth-toggle" id="bandwidthToggle">
+            <i class="fas fa-tachometer-alt"></i>
+            <span>Low Bandwidth Mode</span>
+            <i class="fas fa-toggle-off" id="toggleIcon"></i>
+        </div>
+    </div>
+    
+    <div class="main-layout">
+        <div class="sidebar" id="sidebar">
+            <div class="category-list" id="categoryList">
+                <div style="padding: 1rem; text-align: center;">Loading categories...</div>
+            </div>
+        </div>
+        
+        <div class="content-area">
+            <div class="video-wrapper">
+                <video id="player" playsinline controls crossorigin></video>
+            </div>
+            
+            <div class="status-badge">
+                <span><i class="fas fa-circle status-offline" style="font-size: 8px;"></i> <span id="streamStatus">Ready to play</span></span>
+                <span class="reconnect-info"><i class="fas fa-sync-alt"></i> Auto-reconnect active</span>
+            </div>
+            
+            <div class="channels-section">
+                <h3><i class="fas fa-tv"></i> <span id="currentCategoryTitle">Pakistan</span> Channels</h3>
+                <div class="channels-grid" id="channelsGrid">
+                    <div style="text-align: center; padding: 2rem;">Loading channels...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer-note">
+        <i class="fas fa-exclamation-triangle"></i> Disclaimer: This app aggregates publicly available free-to-air streams. Users are responsible for verifying the legality of streams in their region. No copyright infringement intended.
+    </div>
+    <div id="lowBwIndicator" class="low-bw-indicator" style="display: none;">
+        <i class="fas fa-turtle"></i> Low Bandwidth Mode Active
+    </div>
+</div>
+<div class="overlay" id="overlay"></div>
+
+<!-- Scripts -->
+<script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.8/dist/hls.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
