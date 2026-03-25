@@ -1,0 +1,86 @@
+[
+  {
+    "name": "PTV Sports",
+    "logo": "https://img.icons8.com/color/48/cricket.png",
+    "streamUrl": "https://cdn.pctvnetwork.com/live/ptvsports/playlist.m3u8",
+    "category": "Pakistan"
+  },
+  {
+    "name": "PTV Home",
+    "logo": "https://img.icons8.com/color/48/home.png",
+    "streamUrl": "https://cdn.pctvnetwork.com/live/ptvhome/playlist.m3u8",
+    "category": "Pakistan"
+  },
+  {
+    "name": "GEO News",
+    "logo": "https://img.icons8.com/color/48/news.png",
+    "streamUrl": "https://live.geo.tv/live/geonews/geonews.m3u8",
+    "category": "Pakistan"
+  },
+  {
+    "name": "ARY News",
+    "logo": "https://img.icons8.com/color/48/tv-show.png",
+    "streamUrl": "https://live.arynews.tv/live/arynews/index.m3u8",
+    "category": "Pakistan"
+  },
+  {
+    "name": "Hum TV",
+    "logo": "https://img.icons8.com/color/48/tv--v1.png",
+    "streamUrl": "https://humtv-live.akamaized.net/hls/live/2036332/humtv/master.m3u8",
+    "category": "Pakistan"
+  },
+  {
+    "name": "Star Plus",
+    "logo": "https://img.icons8.com/color/48/star.png",
+    "streamUrl": "https://starpluslive.akamaized.net/hls/live/starplus.m3u8",
+    "category": "India"
+  },
+  {
+    "name": "Zee TV",
+    "logo": "https://img.icons8.com/color/48/z.png",
+    "streamUrl": "https://zeetv.akamaized.net/hls/live/zeetv.m3u8",
+    "category": "India"
+  },
+  {
+    "name": "Sony TV",
+    "logo": "https://img.icons8.com/color/48/sony.png",
+    "streamUrl": "https://sonylive.akamaized.net/hls/live/setindia.m3u8",
+    "category": "India"
+  },
+  {
+    "name": "Colors TV",
+    "logo": "https://img.icons8.com/color/48/color-wheel.png",
+    "streamUrl": "https://colorstv.akamaized.net/hls/live/colors.m3u8",
+    "category": "India"
+  },
+  {
+    "name": "BBC World News",
+    "logo": "https://img.icons8.com/color/48/bbc.png",
+    "streamUrl": "https://bbcwsen.akamaized.net/hls/live/bbcworld.m3u8",
+    "category": "Global"
+  },
+  {
+    "name": "CNN International",
+    "logo": "https://img.icons8.com/color/48/cnn.png",
+    "streamUrl": "https://cnn-cnninternational-1.samsung.wurl.com/manifest/live.m3u8",
+    "category": "Global"
+  },
+  {
+    "name": "ESPN",
+    "logo": "https://img.icons8.com/color/48/espn.png",
+    "streamUrl": "https://espn-espn-1.samsung.wurl.com/manifest/live.m3u8",
+    "category": "Sports"
+  },
+  {
+    "name": "Al Jazeera",
+    "logo": "https://img.icons8.com/color/48/al-jazeera.png",
+    "streamUrl": "https://live-hls-web-aje.getaj.net/AJE/01.m3u8",
+    "category": "Global"
+  },
+  {
+    "name": "Sky News",
+    "logo": "https://img.icons8.com/color/48/sky-news.png",
+    "streamUrl": "https://skymedia-uk.akamaized.net/hls/live/skynews.m3u8",
+    "category": "Global"
+  }
+]
